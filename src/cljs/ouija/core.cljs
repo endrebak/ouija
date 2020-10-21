@@ -80,7 +80,7 @@
                         (rf/dispatch [:fields/structure structure]))
           :value (:structure @fields)
           }]]
-       ])))
+       [:div [:p @(rf/subscribe [:result])]]])))
             ;; [:div.field
             ;;  [:label.label {:for :name} "Structure"]
             ;;  [:textarea.textarea

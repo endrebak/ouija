@@ -40,19 +40,27 @@
   (fn [db [_ structure]]
     (assoc db :structure structure)))
 
-(rf/reg-event-db
-  :fields/path
-  (fn [db [_ path]]
-    (assoc db :path path)))
+
+(rf/reg-sub
+ :fields/path
+ (fn [db _]
+ ;  (js/console.log (str "Hello from sub: " (:path db)))
+   (:path db)))
+
+(rf/reg-sub
+ :fields/structure
+ ;(js/console.log (str "Hello from sub: " (:structure db)))
+ (fn [db _]
+   (:structure db)))
 
 (rf/reg-sub
  :result
- 
- :<- [:fields/path]
- :<- [:fields/structure]
-
-  (fn [[fields structure] v]
-    (js/console.log (str "Hi from reg-sub: " fields structure))))
+ (fn [query-v]
+   (js/console.log "Are we ever here?")
+   [(rf/subscribe [:fields/path]) (rf/subscribe [:fields/structure])])
+ (fn [[fields structure] query-v]
+   (js/console.log (str "Hi from reg-sub: " fields structure))
+   (str fields "   " structure)))
 
 
 (rf/reg-event-fx

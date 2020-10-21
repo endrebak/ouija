@@ -30,6 +30,31 @@
   (fn [db [_ docs]]
     (assoc db :docs docs)))
 
+(rf/reg-event-db
+  :fields/path
+  (fn [db [_ path]]
+    (assoc db :path path)))
+
+(rf/reg-event-db
+  :fields/structure
+  (fn [db [_ structure]]
+    (assoc db :structure structure)))
+
+(rf/reg-event-db
+  :fields/path
+  (fn [db [_ path]]
+    (assoc db :path path)))
+
+(rf/reg-sub
+ :result
+ 
+ :<- [:fields/path]
+ :<- [:fields/structure]
+
+  (fn [[fields structure] v]
+    (js/console.log (str "Hi from reg-sub: " fields structure))))
+
+
 (rf/reg-event-fx
   :fetch-docs
   (fn [_ _]

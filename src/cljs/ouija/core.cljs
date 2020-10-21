@@ -9,6 +9,7 @@
     [markdown.core :refer [md->html]]
     [ouija.ajax :as ajax]
     [ouija.events]
+    [ouija.highlight]
     [reitit.core :as reitit]
     [reitit.frontend.easy :as rfe]
     [clojure.string :as string])
@@ -52,10 +53,53 @@
 ;;                        :name :name
 ;;                        :on-change #(swap! fields assoc)}
 
+(defn message-form []
+  (let [fields (r/atom {})]
+    (fn []
+      ()
+      [:div
+       [:div.field
+        [:label.label {:for :name} "Specter path"]
+        [:input.input
+         {:type :text
+          :name :path
+                                        ; problem: had nested let!
+          :on-change #(let [path (-> % .-target .-value)]
+                        (swap! fields assoc :path path)
+                        (rf/dispatch [:fields/path path]))
+          :value (:path @fields)
+          }]]
+       [:div.field
+        [:label.label {:for :name} "Structure"]
+        [:input.input
+         {:type :text
+          :name :structure
+                                        ; problem: had nested let!
+          :on-change #(let [structure (-> % .-target .-value)]
+                        (swap! fields assoc :structure structure)
+                        (rf/dispatch [:fields/structure structure]))
+          :value (:structure @fields)
+          }]]
+       ])))
+            ;; [:div.field
+            ;;  [:label.label {:for :name} "Structure"]
+            ;;  [:textarea.textarea
+            ;;   {:name :structure
+            ;;    :on-change #(swap! fields assoc :structure (-> % .-target .-value)) :value (:structure @fields)}]]
+            ;; ;; [:div.field
+            ;; ;;  [:label.label {:for :message} "Result"]
+            ;; ;;  [:textarea.textarea
+            ;; ;;   {:name :result
+            ;; ;;    :value #(highlight (:path @fields) (:structure @fields))
+            ;; ;;    :on-change #(swap! fields assoc :message (-> % .-target .-value))}]]
+            ;; [:input.button.is-primary {:type :submit
+            ;;                            :value "comment"}]])))
+
 
 (defn home-page []
   [:section.section>div.container>div.content
    [:h1 "hello"]
+   [message-form]
    ])
 
 (defn page []

@@ -23,7 +23,7 @@
 
 (comment
   (use 'com.rpl.specter)
-  (+ 1)   
+  (+ 1)  
   (def q [MAP-VALS MAP-VALS])  
   (def m {:a {:aa 1} :b {:ba -1 :bb 2}}) 
   (highlight q #(+ % 42) m) 

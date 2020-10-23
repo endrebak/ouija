@@ -9,11 +9,18 @@
     [markdown.core :refer [md->html]]
     [ouija.ajax :as ajax]
     [ouija.events]
-    [ouija.highlight]
+    [ouija.highlight :refer [highlight]]
     [reitit.core :as reitit]
     [reitit.frontend.easy :as rfe]
-    [clojure.string :as string])
+    [clojure.string :as string]
+    [com.rpl.specter :refer [MAP-VALS]])
   (:import goog.History))
+
+
+(js/console.log ouija.highlight)
+
+                ;; /highlight-select [MAP-VALS] [{:a 1}])) 
+(js/console.log ouija.events) 
 
 (defn nav-link [uri title page]
   [:a.navbar-item

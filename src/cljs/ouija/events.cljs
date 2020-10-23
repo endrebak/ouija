@@ -3,7 +3,8 @@
     [re-frame.core :as rf]
     [ajax.core :as ajax]
     [reitit.frontend.easy :as rfe]
-    [reitit.frontend.controllers :as rfc]))
+    [reitit.frontend.controllers :as rfc]
+    ))
 
 ;;dispatchers
 
@@ -60,7 +61,8 @@
    [(rf/subscribe [:fields/path]) (rf/subscribe [:fields/structure])])
  (fn [[fields structure] query-v]
    (js/console.log (str "Hi from reg-sub: " fields structure))
-   (str fields "   " structure)))
+   ;; (highlight fields structure)
+   ))
 
 
 (rf/reg-event-fx

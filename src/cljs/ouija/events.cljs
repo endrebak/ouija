@@ -1,10 +1,13 @@
 (ns ouija.events
   (:require
     [re-frame.core :as rf]
+    [clojure.edn :as edn]
     [ajax.core :as ajax]
     [reitit.frontend.easy :as rfe]
     [reitit.frontend.controllers :as rfc]
-    ))
+    [ouija.highlight :refer [highlight]]
+    [com.rpl.specter :refer [MAP-VALS]])
+  )
 
 ;;dispatchers
 
@@ -34,12 +37,13 @@
 (rf/reg-event-db
   :fields/path
   (fn [db [_ path]]
-    (assoc db :path path)))
+    ;; replace with resolve if you encounter a symbol
+    (assoc db :path (eval (edn/read-string path)))))
 
 (rf/reg-event-db
   :fields/structure
   (fn [db [_ structure]]
-    (assoc db :structure structure)))
+    (assoc db :structure (edn/read-string structure))))
 
 
 (rf/reg-sub
@@ -61,8 +65,7 @@
    [(rf/subscribe [:fields/path]) (rf/subscribe [:fields/structure])])
  (fn [[fields structure] query-v]
    (js/console.log (str "Hi from reg-sub: " fields structure))
-   ;; (highlight fields structure)
-   ))
+   (str (highlight fields structure))))
 
 
 (rf/reg-event-fx

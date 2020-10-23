@@ -11,8 +11,8 @@
 
 
 (defn highlight
-  ([q m] (highlight-select [q m]))
-  ([q f m] (highlight-transform [q f m]))) 
+  ([q m] (highlight-select q m))
+  ([q f m] (highlight-transform q f m))) 
 
 
 (defn result

@@ -1,18 +1,16 @@
 (ns ouija.highlight
-  (:require [com.rpl.specter :refer [transform]]))
-
+  (:require [com.rpl.specter :refer [transform select]]))
 
 (defn highlight-select [q m]
   (transform q #(tagged-literal 'highlight %) m))
-
 
 (defn highlight-transform [q f m]
   (transform q #(tagged-literal 'highlight (f %)) m)) 
 
 
 (defn highlight
-  ([q m] (highlight-select [q m]))
-  ([q f m] (highlight-transform [q f m]))) 
+  ([q m] (highlight-select q m))
+  ([q f m] (highlight-transform q f m))) 
 
 
 (defn result

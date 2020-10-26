@@ -38,7 +38,7 @@
   :fields/path
   (fn [db [_ path]]
     ;; replace with resolve if you encounter a symbol
-    (assoc db :path (eval (edn/read-string path)))))
+    (assoc db :path (edn/read-string path))))
 
 (rf/reg-event-db
   :fields/structure
@@ -59,12 +59,15 @@
    (:structure db)))
 
 (rf/reg-sub
- :result
+ :highlight/result
+
  (fn [query-v]
    (js/console.log "Are we ever here?")
    [(rf/subscribe [:fields/path]) (rf/subscribe [:fields/structure])])
+
  (fn [[fields structure] query-v]
-   (js/console.log (str "Hi from reg-sub: " fields structure))
+   (js/console.log (str "Hi from reg-sub: " (type fields)))
+   (js/console.log (str "Hi from reg-sub: " (type structure)))
    (str (highlight fields structure))))
 
 

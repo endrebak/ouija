@@ -87,20 +87,7 @@
                         (rf/dispatch [:fields/structure structure]))
           :value (:structure @fields)
           }]]
-       [:div [:p @(rf/subscribe [:result])]]])))
-            ;; [:div.field
-            ;;  [:label.label {:for :name} "Structure"]
-            ;;  [:textarea.textarea
-            ;;   {:name :structure
-            ;;    :on-change #(swap! fields assoc :structure (-> % .-target .-value)) :value (:structure @fields)}]]
-            ;; ;; [:div.field
-            ;; ;;  [:label.label {:for :message} "Result"]
-            ;; ;;  [:textarea.textarea
-            ;; ;;   {:name :result
-            ;; ;;    :value #(highlight (:path @fields) (:structure @fields))
-            ;; ;;    :on-change #(swap! fields assoc :message (-> % .-target .-value))}]]
-            ;; [:input.button.is-primary {:type :submit
-            ;;                            :value "comment"}]])))
+       [:div [:p @(rf/subscribe [:highlight/result])]]])))
 
 
 (defn home-page []

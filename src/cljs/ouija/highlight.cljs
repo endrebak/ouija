@@ -1,8 +1,12 @@
 (ns ouija.highlight
   (:require [com.rpl.specter :refer [transform select]]))
 
+
 (defn highlight-select [q m]
+  (js/console.log (str "type q: "(type q)))
+  (js/console.log (str "type m: "(type m)))
   (transform q #(tagged-literal 'highlight %) m))
+
 
 (defn highlight-transform [q f m]
   (transform q #(tagged-literal 'highlight (f %)) m)) 
@@ -16,7 +20,6 @@
 (defn result
   ([q m] (select q m))
   ([q f m] (transform q f m)))
-
 
 
 (comment

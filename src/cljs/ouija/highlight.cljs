@@ -1,11 +1,14 @@
 (ns ouija.highlight
-  (:require [com.rpl.specter :refer [transform select]]))
+  (:require [com.rpl.specter :refer [transform select MAP-VALS MAP-KEYS]]))
 
+(def specter-macros
+  {'MAP-VALS MAP-VALS
+   'MAP-KEYS MAP-KEYS})
 
 (defn highlight-select [q m]
-  (js/console.log (str "type q: "(type q)))
-  (js/console.log (str "type m: "(type m)))
-  (transform q #(tagged-literal 'highlight %) m))
+  (js/console.log "type q: " (type q) (mapv specter-macros q))
+  (js/console.log "type m: " (type m) m (first m))
+  (transform (mapv specter-macros q) #(tagged-literal 'highlight %) m))
 
 
 (defn highlight-transform [q f m]

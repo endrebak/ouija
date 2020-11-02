@@ -59,42 +59,48 @@
 ;;         [:input.input {:type :text
 ;;                        :name :name
 ;;                        :on-change #(swap! fields assoc)}
+;; 
+;; (let [ready? (rf/subscribe [:initialized?])]
+;;      (if @ready?
+;;        (do (js/console.log "ready") [message-form])
+;;        (do (js/console.log "not ready") [:h1 "Initializing"])))
 
 (defn message-form []
-  (let [fields (r/atom {})]
+  (let [ready? (rf/subscribe [:initialized?])
+        fields (r/atom {})]
     (fn []
-      ()
-      [:div
-       [:div.field
-        [:label.label {:for :name} "Specter path"]
-        [:input.input
-         {:type :text
-          :name :path
+      (if @ready?
+        [:div
+         [:div.field
+          [:label.label {:for :name} "Specter path"]
+          [:input.input
+           {:type :text
+            :name :path
                                         ; problem: had nested let!
-          :on-change #(let [path (-> % .-target .-value)]
-                        (swap! fields assoc :path path)
-                        (rf/dispatch [:fields/path path]))
-          :value (:path @fields)
-          }]]
-       [:div.field
-        [:label.label {:for :name} "Structure"]
-        [:input.input
-         {:type :text
-          :name :structure
+            :on-change #(let [path (-> % .-target .-value)]
+                          (swap! fields assoc :path path)
+                          (rf/dispatch [:fields/path path]))
+            :value (:path @fields)
+            }]]
+         [:div.field
+          [:label.label {:for :name} "Structure"]
+          [:input.input
+           {:type :text
+            :name :structure
                                         ; problem: had nested let!
-          :on-change #(let [structure (-> % .-target .-value)]
-                        (swap! fields assoc :structure structure)
-                        (rf/dispatch [:fields/structure structure]))
-          :value (:structure @fields)
-          }]]
-       [:div [:p @(rf/subscribe [:highlight/result])]]])))
+            :on-change #(let [structure (-> % .-target .-value)]
+                          (swap! fields assoc :structure structure)
+                          (rf/dispatch [:fields/structure structure]))
+            :value (:structure @fields)
+            }]]
+         [:div [:p @(rf/subscribe [:highlight/result])]]]
+        [:h1 "Initializing"]))))
 
 
 (defn home-page []
   [:section.section>div.container>div.content
    [:h1 "hello"]
-   [message-form]
-   ])
+   [message-form]])
 
 (defn page []
   (if-let [page @(rf/subscribe [:common/page])]
@@ -123,6 +129,7 @@
 ;; Initialize app
 (defn ^:dev/after-load mount-components []
   (rf/clear-subscription-cache!)
+  (rf/dispatch [:initialize-db])
   (rdom/render [#'page] (.getElementById js/document "app")))
 
 (defn init! []

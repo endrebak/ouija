@@ -29,6 +29,18 @@
   (fn [_ [_ url-key params query]]
     {:common/navigate-fx! [url-key params query]}))
 
+(re-frame.core/reg-sub   ;; we can check if there is data
+  :initialized?          ;; usage (subscribe [:initialized?])
+  (fn  [db _]
+	(not (empty? db))))  ;; do we have data
+
+(rf/reg-event-db
+  :initialize-db
+  (fn [db _]
+    (-> db
+        (assoc :path [MAP-VALS])
+        (assoc :structure {:a 1 :d {:b [2 3]}}))))
+
 (rf/reg-event-db
   :set-docs
   (fn [db [_ docs]]
@@ -65,10 +77,10 @@
    (js/console.log "Are we ever here?")
    [(rf/subscribe [:fields/path]) (rf/subscribe [:fields/structure])])
 
- (fn [[fields structure] query-v]
-   (js/console.log (str "Hi from reg-sub: " (type fields)))
-   (js/console.log (str "Hi from reg-sub: " (type structure)))
-   (str (highlight fields structure))))
+ (fn [[path structure] query-v]
+   (js/console.log "Hi from reg-sub: " path)
+   (js/console.log "Hi from reg-sub: " structure)
+   (str (highlight path structure))))
 
 
 (rf/reg-event-fx

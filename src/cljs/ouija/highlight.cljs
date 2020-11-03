@@ -1,18 +1,25 @@
 (ns ouija.highlight
-  (:require [com.rpl.specter :refer [transform select MAP-VALS MAP-KEYS]]))
+  (:require [com.rpl.specter :refer [transform select MAP-VALS MAP-KEYS]]
+            [clojure.walk :refer [postwalk]]))
 
 (def specter-macros
-  {'MAP-VALS MAP-VALS
-   'MAP-KEYS MAP-KEYS})
+  (-> (ns-publics 'com.rpl.specter)))  
+
+
+
 
 (defn highlight-select [q m]
-  (js/console.log "type q: " (type q) (mapv specter-macros q))
-  (js/console.log "type m: " (type m) m (first m))
-  (transform (mapv specter-macros q) #(tagged-literal 'highlight %) m))
+  (transform q #(tagged-literal 'highlight %) m))
 
 
 (defn highlight-transform [q f m]
   (transform q #(tagged-literal 'highlight (f %)) m)) 
+
+
+(defn highlight [q m & f]
+  (let [path (postwalk #(get d % %))]
+    ))
+  
 
 
 (defn highlight
